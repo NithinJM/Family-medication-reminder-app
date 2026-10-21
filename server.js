@@ -236,7 +236,7 @@ function scheduledAt(key, time) {
   return new Date(year, month - 1, day, hour, minute, 0, 0);
 }
 
-async function sendEscalationEmail(alert) {
+async function sendCaregiverAlertEmail(alert) {
   if (!smtpReady()) return 'not_configured';
   try {
     const caregivers = await Account.find({
@@ -251,8 +251,8 @@ async function sendEscalationEmail(alert) {
       from: emailSender(),
       to: caregivers.map(caregiver => caregiver.email).join(', '),
       subject: `MedVigil alert: ${alert.medicationName} needs attention`,
-      text: `A critical medication dose needs attention.\n\nMedication: ${alert.medicationName}\nScheduled: ${scheduledTime}\n\nThis dose was not marked as taken within 30 minutes of its scheduled time. Please check in with your family member.`,
-      html: `<p>A critical medication dose needs attention.</p><p><strong>Medication:</strong> ${escapeHtml(alert.medicationName)}<br><strong>Scheduled:</strong> ${escapeHtml(scheduledTime)}</p><p>This dose was not marked as taken within 30 minutes of its scheduled time. Please check in with your family member.</p>`
+      text: `${alert.message}\n\nMedication: ${alert.medicationName}\nScheduled: ${scheduledTime}\n\nPlease check in with your family member.`,
+      html: `<p>${escapeHtml(alert.message)}</p><p><strong>Medication:</strong> ${escapeHtml(alert.medicationName)}<br><strong>Scheduled:</strong> ${escapeHtml(scheduledTime)}</p><p>Please check in with your family member.</p>`
     });
     return 'sent';
   } catch (error) {
@@ -261,11 +261,44 @@ async function sendEscalationEmail(alert) {
   }
 }
 
+async function createOrUpdateCareAlert({ medication, scheduledFor, message, reopen = false }) {
+  let alert = await CareAlert.findOne({ medicationId: medication._id, scheduledFor });
+  if (!alert) {
+    alert = new CareAlert({
+      familyId: medication.familyId,
+      medicationId: medication._id,
+      medicationName: medication.name,
+      scheduledFor,
+      message
+    });
+    try { await alert.save(); }
+    catch (error) {
+      if (error.code !== 11000) throw error;
+      alert = await CareAlert.findOne({ medicationId: medication._id, scheduledFor });
+      if (!alert) throw error;
+    }
+  } else {
+    alert.medicationName = medication.name;
+    alert.message = message;
+    if (reopen && alert.resolvedAt) {
+      alert.resolvedAt = null;
+      alert.emailStatus = 'pending';
+    }
+    await alert.save();
+  }
+  if (alert.emailStatus !== 'sent') {
+    alert.emailStatus = await sendCaregiverAlertEmail(alert);
+    await alert.save();
+    console.log(`Caregiver alert created for ${medication.name}; email ${alert.emailStatus}.`);
+  }
+  return alert;
+}
+
 async function checkOverdueDoses() {
   if (mongoose.connection.readyState !== 1) return;
   const now = new Date();
   const key = dateKey();
-  const medications = await Medication.find({ active: true, critical: true }).lean();
+  const medications = await Medication.find({ active: true }).lean();
   for (const medication of medications) {
     const scheduledFor = scheduledAt(key, medication.time);
     if (now.getTime() - scheduledFor.getTime() < 30 * 60 * 1000) continue;
@@ -273,18 +306,12 @@ async function checkOverdueDoses() {
     if (existingDose?.status === 'taken') continue;
     const existingAlert = await CareAlert.findOne({ medicationId: medication._id, scheduledFor }).lean();
     if (existingAlert) continue;
-    const alert = new CareAlert({
-      familyId: medication.familyId,
-      medicationId: medication._id,
-      medicationName: medication.name,
-      scheduledFor,
-      message: 'Not marked taken within 30 minutes of its scheduled time.'
-    });
     try {
-      const emailStatus = await sendEscalationEmail(alert);
-      alert.emailStatus = emailStatus;
-      await alert.save();
-      console.log(`Escalation created for ${medication.name}; caregiver email ${emailStatus}.`);
+      await createOrUpdateCareAlert({
+        medication,
+        scheduledFor,
+        message: 'No check-in was received within 30 minutes of this medication’s scheduled time.'
+      });
     } catch (error) {
       if (error.code !== 11000) console.error('Unable to create care alert:', error.message);
     }
@@ -571,17 +598,26 @@ async function recordDoseStatus(req, res, next) {
     if (Number.isNaN(recordedAt.getTime())) return res.status(400).json({ error: 'A valid recordedAt timestamp is required.' });
     const scheduledFor = req.body.scheduledFor ? new Date(req.body.scheduledFor) : scheduledAt(dateKey(recordedAt), medication.time);
     if (Number.isNaN(scheduledFor.getTime())) return res.status(400).json({ error: 'A valid scheduledFor timestamp is required.' });
+    const previousLog = await DoseLog.findOne({ medicationId: medication._id, scheduledFor }).lean();
     const log = await DoseLog.findOneAndUpdate(
       { medicationId: medication._id, scheduledFor },
       { $set: { familyId: req.authAccount.familyId, status: req.body.status, recordedAt } },
       { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
     );
     if (req.body.status === 'taken') await CareAlert.updateMany({ familyId: req.authAccount.familyId, medicationId: medication._id, scheduledFor, resolvedAt: null }, { $set: { resolvedAt: recordedAt } });
+    if (req.body.status === 'not_taken' && previousLog?.status !== 'not_taken') {
+      await createOrUpdateCareAlert({
+        medication,
+        scheduledFor,
+        message: 'The senior marked this medication as not taken.',
+        reopen: previousLog?.status === 'taken'
+      });
+    }
     res.status(200).json({ ok: true, medicationId: String(medication._id), status: log.status, recordedAt: log.recordedAt });
   } catch (error) { next(error); }
 }
-app.post('/api/medications/:id/status', recordDoseStatus);
-app.post('/api/medications/:id/taken', (req, res, next) => { req.body.status = 'taken'; recordDoseStatus(req, res, next); });
+app.post('/api/medications/:id/status', requireRole('senior'), recordDoseStatus);
+app.post('/api/medications/:id/taken', requireRole('senior'), (req, res, next) => { req.body.status = 'taken'; recordDoseStatus(req, res, next); });
 
 app.get('/', async (req, res, next) => {
   if (!req.session?.accountId || mongoose.connection.readyState !== 1) return res.sendFile(path.join(__dirname, 'welcome.html'));

@@ -23,7 +23,7 @@ In local development, if SMTP is not configured, verification links are printed 
 
 ## Escalation
 
-Critical medications are checked once per minute by the server. If a dose has not been marked Taken within 30 minutes of its scheduled time, MedVigil creates a caregiver alert in the dashboard and emails the verified caregiver account address. Configure the SMTP settings in `.env` (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and `SMTP_PASS`; `EMAIL_FROM` is optional). Without SMTP credentials, alerts still appear in the dashboard but email delivery is unavailable.
+All active medications are checked once per minute by the server. If a senior marks a dose Not taken, MedVigil creates a caregiver alert and sends an email immediately. If there is no dose check-in within 30 minutes after its scheduled time, the server creates an alert and emails the verified caregiver account. Messages use the MedVigil sender configured by `EMAIL_FROM` (or default to the SMTP account). Configure SMTP in `.env` (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and `SMTP_PASS`). Without valid SMTP credentials, alerts still appear in the dashboard but email delivery is unavailable.
 
 ## API
 

@@ -77,8 +77,8 @@ function renderSummary() {
   const banner = document.getElementById('alert-banner');
   banner.classList.toggle('alert-escalation', criticalAlerts.length > 0 || overdue.length > 0);
   if (criticalAlerts.length || overdue.length) {
-    title.textContent = 'A critical dose needs attention';
-    description.textContent = `${criticalAlerts.length || overdue.length} critical medication${(criticalAlerts.length || overdue.length) === 1 ? '' : 's'} not confirmed within 30 minutes.`;
+    title.textContent = 'A medication dose needs attention';
+    description.textContent = `${criticalAlerts.length || overdue.length} medication dose${(criticalAlerts.length || overdue.length) === 1 ? '' : 's'} need a family check-in.`;
     time.textContent = 'ESCALATED';
   } else {
     title.textContent = total && completed === total ? 'Today’s medication routine is complete' : 'Medication routine is on track';
