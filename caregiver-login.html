@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f8f5">
+  <meta name="referrer" content="no-referrer">
+  <title>Caregiver email sign in — MedVigil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="login.css">
+</head>
+<body class="login-page caregiver-login">
+  <main class="login-shell">
+    <a class="login-brand" href="/"><span class="login-mark">♥</span><span>MedVigil<span class="brand-dot">.</span><small>care, connected</small></span></a>
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="login-icon caregiver-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"/><path d="M16 7h3v3"/></svg></div>
+      <p class="login-eyebrow">CAREGIVER PORTAL</p><h1 id="login-title">Welcome back</h1>
+      <p class="login-subtitle">Sign in to check family updates. Email verification is required before medication details are shown.</p><p class="registration-note" hidden>Create a new family space, or enter a family invitation code to join an existing care circle.</p>
+      <div class="auth-tabs" role="tablist"><button type="button" class="auth-tab active" data-mode="login" aria-selected="true">Sign in</button><button type="button" class="auth-tab" data-mode="register" aria-selected="false">Create account</button></div>
+      <form id="auth-form" data-role="caregiver" novalidate>
+        <div class="auth-name-field" hidden><label for="full-name">Your name</label><input id="full-name" name="name" type="text" autocomplete="name" maxlength="80"></div>
+        <div class="auth-family-field" hidden><label for="family-code">Family invitation code (optional)</label><input id="family-code" name="familyCode" type="text" autocomplete="off" maxlength="20" placeholder="Enter the code from the caregiver"></div>
+        <label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" minlength="10" required>
+        <p class="auth-hint" hidden>Use at least 10 characters for your password.</p>
+        <p class="login-error" id="auth-error" role="alert" aria-live="polite"></p>
+        <button class="login-submit caregiver-submit" id="auth-submit" type="submit">Sign in to MedVigil <span>→</span></button>
+      </form>
+      <button type="button" class="forgot-password-link" id="forgot-password">Forgot your password?</button>
+      <section class="verification-box" id="verification-box" aria-live="polite" hidden><strong>Check your email</strong><p>Open the verification link we sent. Family medication details remain hidden until your email is verified.</p><div class="family-code-result" id="family-code-result" hidden><span>Share this code with the senior family member:</span><strong id="family-code-value"></strong><button type="button" id="copy-family-code">Copy family code</button></div><a id="dev-verification-link" href="#" hidden>Open development verification link</a><button type="button" id="resend-verification" hidden>Send another verification email</button><button type="button" id="back-to-sign-in">Return to sign in</button></section>
+      <section class="verification-box password-panel" id="forgot-password-panel" aria-live="polite" hidden><strong>Reset your password</strong><p>Enter your email and we’ll send a reset link if it matches a caregiver account.</p><label for="reset-email">Email address</label><input id="reset-email" type="email" autocomplete="email" required><p class="login-error" id="reset-request-error" role="alert"></p><p class="reset-success" id="reset-request-success" hidden>If an account matches that email, a password reset link will be sent.</p><button type="button" id="request-password-reset">Send reset link</button><button type="button" id="cancel-forgot-password">Back to sign in</button></section>
+      <section class="verification-box password-panel" id="reset-password-panel" aria-live="polite" hidden><strong>Choose a new password</strong><p>Use at least 10 characters.</p><label for="new-password">New password</label><input id="new-password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required><label for="confirm-password">Confirm new password</label><input id="confirm-password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required><p class="login-error" id="reset-password-error" role="alert"></p><button type="button" class="login-submit caregiver-submit" id="save-new-password">Save new password</button><button type="button" id="cancel-reset-password">Back to sign in</button></section>
+      <p class="login-error" id="verified-message" aria-live="polite"></p>
+    </section>
+    <p class="role-switch">Taking your own medication? <a href="senior-login.html">Senior sign in</a></p>
+    <p class="demo-notice">Your family’s medication details are available only after email verification and sign in.</p>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html>

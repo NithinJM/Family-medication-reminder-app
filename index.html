@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f5">
+  <title>MedVigil — Family medication care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="MedVigil home"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 27s-10-6.1-10-13.4A5.5 5.5 0 0 1 16 10a5.5 5.5 0 0 1 10 3.6C26 20.9 16 27 16 27Z"/><path d="M11 16h3l1.7-3.3 2.6 6 1.5-2.7H24"/></svg></span><span>MedVigil<span class="brand-dot">.</span><small>care, connected</small></span></a>
+      <div class="workspace-label">YOUR FAMILY</div>
+      <button class="family-switch"><span class="avatar avatar-lilac">F</span><span class="family-name">Family care<span>Family workspace</span></span><svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav-list">
+        <button class="nav-item active" data-view="caregiver"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="4" rx="1.5"/><rect x="13.5" y="11.5" width="7" height="9" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Overview</button>
+        <button class="nav-item" data-view="medications"><svg viewBox="0 0 24 24"><path d="M8.2 4.5a5.2 5.2 0 0 1 7.4 0l3.9 3.9a5.2 5.2 0 0 1-7.4 7.4l-3.9-3.9a5.2 5.2 0 0 1 0-7.4Z"/><path d="m8.5 15.5 7-7"/></svg>Medications</button>
+        <button class="nav-item" data-view="schedule"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 9.5h17m-12 4 2 2 4-4"/></svg>Schedule</button>
+        <button class="nav-item" data-view="activity"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"/><path d="M16 7h3v3"/></svg>Activity</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><span class="help-icon">✳</span><strong>Here for your family</strong><p>Need a hand setting things up?</p><button>Visit help center <span>↗</span></button></div>
+        <button class="nav-item settings" data-view="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.4.8l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.5-.8l-1.6.7-1.4-2.4L8 15a7 7 0 0 1 0-1.7l-1.5-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.4-.8l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.5.8l1.6-.7 1.4 2.4-1.4 1.1a7 7 0 0 1-.1 1.7Z"/></svg>Settings</button>
+        <button class="profile"><span class="avatar avatar-green" id="profile-avatar">K</span><span id="profile-identity">MedVigil member<small>Verified family account</small></span><span class="more">···</span></button>
+        <button class="sign-out-link" id="sign-out">Sign out <span>↗</span></button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div class="breadcrumbs"><span>Family workspace</span><span class="crumb-slash">/</span><strong id="crumb-current">Overview</strong></div><div class="top-actions"><div class="live-status"><span></span>All systems normal</div><button class="icon-button notification-button" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg><i></i></button><div class="top-divider"></div><span class="today-label" id="today-label">Today</span><button class="sign-out-mobile" id="sign-out-mobile">Sign out</button></div></header>
+      <section class="page-content">
+        <div class="welcome-row"><div><div class="eyebrow"><span class="sun-icon">☼</span> FAMILY MEDICATIONS</div><h1>Loading family details</h1><p class="subtitle">Connecting to your verified family routine.</p></div><div class="header-buttons"><button class="button button-quiet" id="view-toggle" type="button" hidden><svg viewBox="0 0 24 24"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg><span>Senior view</span></button><button class="button button-primary add-medication" id="add-medication"><span>＋</span> Add medication</button></div></div>
+
+        <div class="alert-banner" id="alert-banner"><div class="alert-icon"><svg viewBox="0 0 24 24"><path d="M12 8v5m0 3h.01M10.3 3.8 2.9 17a2 2 0 0 1 1.8-3h14.6a2 2 0 0 1 1.8 3L13.7 3.8a2 2 0 0 0-3.4 0Z"/></svg></div><div class="alert-copy"><strong id="alert-title">Your family routine is loading</strong><span id="alert-description">Medication times, dosages, and updates will appear when connected.</span></div><span class="alert-time" id="alert-time">TODAY</span></div>
+
+        <div class="section-heading"><div><h2>Today at a glance</h2><p>A little peace of mind, at a glance.</p></div><button class="text-link" data-view="activity">View activity <span>→</span></button></div>
+        <div class="stats-grid">
+          <article class="stat-card doses-card"><div class="stat-top"><span class="stat-label">DOSES TAKEN</span><span class="stat-symbol mint-symbol">✓</span></div><div class="stat-main"><strong id="dose-count">0</strong><span class="stat-of">of 0</span><span class="trend-pill">Today</span></div><div class="progress-track"><span id="dose-progress" style="width:0%"></span></div><div class="stat-foot">Confirmed check-ins for today</div></article>
+          <article class="stat-card streak-card"><div class="stat-top"><span class="stat-label">WEEKLY ROUTINE</span><span class="stat-symbol peach-symbol">✳</span></div><div class="stat-main"><strong id="streak-count">—</strong><span class="stat-of">days</span></div><div class="mini-bars" aria-label="Weekly adherence appears after dose check-ins"><i style="height:0%"></i><i style="height:0%"></i><i style="height:0%"></i><i style="height:0%"></i><i style="height:0%"></i><i style="height:0%"></i><i class="bar-today" style="height:0%"></i></div><div class="stat-foot">History updates from family check-ins</div></article>
+          <article class="stat-card next-card"><div class="stat-top"><span class="stat-label">NEXT REMINDER</span><span class="stat-symbol lavender-symbol">◷</span></div><div class="next-info"><div class="med-mini-icon icon-sun">☼</div><div><strong id="next-med-name">Loading schedule</strong><span id="next-med-dose">Medication name and dosage will appear here.</span></div><time id="next-med-time">—</time></div><div class="next-bottom"><span class="next-dot"></span>Synced with the family routine</div></article>
+        </div>
+
+        <section class="panel notifications-panel"><div class="panel-heading"><div><h2>Caregiver alerts</h2><p>Important updates from the family routine</p></div><span class="alert-live-tag"><i></i> MONITORING</span></div><div id="notification-panel"><p class="empty-notification">Family routine updates will appear here.</p></div></section>
+
+        <div class="lower-grid">
+          <section class="panel schedule-panel"><div class="panel-heading"><div><h2 id="routine-title">Medication schedule</h2><p id="schedule-caption">Loading your verified family routine…</p></div><button class="more-button" aria-label="More schedule options">···</button></div><div class="schedule-list" id="schedule-list"></div><button class="schedule-footer" data-view="schedule">See full schedule <span>→</span></button></section>
+          <section class="panel family-panel"><div class="panel-heading"><div><h2>Your care circle</h2><p>People with verified family access</p></div><button class="invite-button" type="button">＋ Invite senior</button></div><form id="family-member-setup" class="family-member-setup" hidden><label for="senior-name">Family member’s name</label><div><input id="senior-name" name="seniorName" maxlength="80" placeholder="Enter their name"><button type="submit">Save</button></div><p id="family-setup-feedback" role="status"></p></form><div class="member-row"><span class="avatar avatar-lilac large">E</span><div class="member-copy"><strong>Verified senior</strong><span>Senior family member</span></div><span class="online-pill"><i></i> Verified</span></div><div class="member-row"><span class="avatar avatar-green large">C</span><div class="member-copy"><strong>Verified caregiver</strong><span>Family caregiver</span></div><span class="online-pill online-muted"><i></i> Verified</span></div><div class="care-note"><span>♥</span><div><strong>Care works better together</strong><p>Each dose check-in is shared with verified family members.</p></div></div></section>
+        </div>
+        <section class="panel history-panel" id="history-panel"><div class="panel-heading"><div><h2>Routine history</h2><p>Daily check-ins and the last seven days</p></div><div class="history-tabs" role="tablist" aria-label="History range"><button class="history-tab active" data-range="day" role="tab" aria-selected="true">Today</button><button class="history-tab" data-range="week" role="tab" aria-selected="false">7 days</button></div></div><div class="history-summary" id="history-summary"></div><div class="history-list" id="history-list"></div></section>
+        <section class="panel settings-panel" id="settings-panel" aria-labelledby="settings-title" hidden>
+          <div class="panel-heading"><div><h2 id="settings-title">Settings</h2><p>Manage your family connection</p></div></div>
+          <div class="settings-invite"><div><strong>Family member invite code</strong><p>Share this code with your senior family member so they can join your care circle.</p></div><div class="settings-code-row"><code id="settings-family-code">Loading…</code><button class="button button-quiet" id="copy-settings-code" type="button">Copy code</button></div></div>
+        </section>
+        <footer class="page-footer"><span>Made for the moments that matter <b>♡</b></span><span>MedVigil helps families stay connected. <a href="senior-login.html">Senior sign in</a> · <a href="caregiver-login.html">Caregiver sign in</a></span></footer>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog id="invite-dialog" class="med-dialog invite-dialog"><div class="dialog-content"><div class="dialog-head"><div><span class="eyebrow">YOUR CARE CIRCLE</span><h2>Invite a family member</h2></div><button class="dialog-close" id="close-invite-dialog" type="button" aria-label="Close">×</button></div><section class="invite-option"><div><strong>Invite the senior with a family code</strong><p>They can enter this code when creating their senior account.</p></div><div class="invite-code-row"><code id="invite-dialog-code">Loading…</code><button class="button button-quiet" id="copy-invite-dialog-code" type="button">Copy code</button></div></section><form id="caregiver-invite-form" class="caregiver-invite-form"><label for="caregiver-invite-email">Invite another caregiver by email</label><p>We’ll email them a link to join this family care circle.</p><div class="invite-email-row"><input id="caregiver-invite-email" name="email" type="email" autocomplete="email" placeholder="caregiver@example.com" required><button class="button button-primary" type="submit">Send invite</button></div><p id="caregiver-invite-feedback" role="status"></p></form></div></dialog>
+  <dialog id="medication-dialog" class="med-dialog"><form method="dialog" id="medication-form"><div class="dialog-head"><div><span class="eyebrow">MEDICATIONS</span><h2>Add a medication</h2></div><button class="dialog-close" value="cancel" aria-label="Close">×</button></div><label>Medication name<input name="name" placeholder="e.g. Vitamin D" required></label><div class="form-row"><label>Dosage<input name="dose" placeholder="1 tablet" required></label><label>Time<input name="time" type="time" value="09:00" required></label></div><label>With<input name="with" placeholder="with breakfast"></label><label class="critical-option"><input type="checkbox" name="critical"><span><strong>Critical medication</strong><small>Alert a caregiver if not marked taken within 30 minutes.</small></span></label><button class="button button-primary dialog-submit" value="default">Add to schedule <span>→</span></button></form></dialog>
+  <script src="app.js"></script>
+</body>
+</html>
